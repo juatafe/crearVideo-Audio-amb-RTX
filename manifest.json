@@ -1,0 +1,18 @@
+[
+  {
+    "id": "001",
+    "text": "Escriu ací el text complet del vídeo.\n\nPer a controlar les escenes manualment, separa-les amb una línia que continga només:",
+    "audio": "locucio/fragments/001.wav",
+    "image": "imatges/001.png",
+    "image_prompt": "cinematic illustration, coherent visual style, detailed, atmospheric lighting. Scene inspired by this narration: Escriu ací el text complet del vídeo.\n\nPer a controlar les escenes manualment, separa-les amb una línia que continga només:. No written text in the image. Keep characters, clothing, setting and visual language coherent with adjacent scenes.",
+    "negative_prompt": "text, watermark, logo, blurry, low quality, malformed anatomy, extra fingers"
+  },
+  {
+    "id": "002",
+    "text": "Cada bloc es convertirà en una escena independent.",
+    "audio": "locucio/fragments/002.wav",
+    "image": "imatges/002.png",
+    "image_prompt": "cinematic illustration, coherent visual style, detailed, atmospheric lighting. Scene inspired by this narration: Cada bloc es convertirà en una escena independent.. No written text in the image. Keep characters, clothing, setting and visual language coherent with adjacent scenes.",
+    "negative_prompt": "text, watermark, logo, blurry, low quality, malformed anatomy, extra fingers"
+  }
+]

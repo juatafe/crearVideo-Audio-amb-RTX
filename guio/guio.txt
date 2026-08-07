@@ -1,0 +1,7 @@
+Escriu ací el text complet del vídeo.
+
+Per a controlar les escenes manualment, separa-les amb una línia que continga només:
+
+---
+
+Cada bloc es convertirà en una escena independent.

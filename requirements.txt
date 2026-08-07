@@ -1,0 +1,2 @@
+# Els scripts principals utilitzen només la llibreria estàndard de Python.
+# Afig ací les dependències específiques del teu motor TTS si cal.

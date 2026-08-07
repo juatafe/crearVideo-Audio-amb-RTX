@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+locucio/fragments/*.wav
+locucio/*.wav
+locucio/*.mp3
+imatges/*.png
+imatges/*.jpg
+video/*.mp4
+tmp/*
+!tmp/.gitkeep
+workflows/comfyui_api_workflow.json

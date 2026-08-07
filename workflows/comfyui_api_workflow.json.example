@@ -1,0 +1,3 @@
+{
+  "README": "Substituïx este fitxer per un workflow real exportat des de ComfyUI en API format i guarda'l com workflows/comfyui_api_workflow.json. El script detecta nodes CLIPTextEncode i SaveImage."
+}
