@@ -1,7 +1,46 @@
-Escriu ací el text complet del vídeo.
-
-Per a controlar les escenes manualment, separa-les amb una línia que continga només:
+VEU: lluc
+IMATGE: Pla general de l'interior d'un gabinet de família burgesa valenciana l'any 1936. Carlos està assegut tot sol en un divà de vellut i té aire cansat. Hi ha un rellotge que marca les tres, una porta a l'esquerra i un balcó obert amb llum de primavera. Estil còmic valencià de 1936.
+IMATGE_EN: Wide shot of the same bourgeois Valencian family sitting room interior in 1936, 2D period comic-book illustration, clear black ink lines and muted flat colors. Exactly one person: Carlos, a slim young blond man with neatly swept-back blond hair, wearing a dark 1936 bourgeois suit, sitting alone on a velvet divan with a tired expression. A clock shows three o'clock; a closed door is on the left and an open balcony lets in spring sunlight. Interior only, no street, no crowd, no women, no children, no extra people, no modern objects, no photorealism.
+¿I per què no ho fas?
 
 ---
 
-Cada bloc es convertirà en una escena independent.
+VEU: gina
+IMATGE: Pla mitjà de Gina, la mateixa dona jove, expressiva i segura, amb cabells foscos ondulats i vestit burgés clar de 1936. Està dreta al gabinet i parla cap a Carlos, que apareix només de perfil al fons. Només hi ha Carlos i Gina. Estil còmic valencià de 1936.
+IMATGE_EN: Medium shot in the same sitting room, 2D period comic-book illustration. Exactly two people: Gina, a young confident woman with wavy dark hair and a light 1936 bourgeois dress, standing and speaking; Carlos, the same slim blond man in the same dark suit, visible only in side profile in the background. Same divan, clock, left door and open balcony. Interior only, no other people, no children, no crowd, no modern objects, no photorealism.
+Perquè soc dona. I em conforme amb ser dona. Al meu gust, tiraria a la jabalina, però he d'endolcir taronges. He de i vull.
+
+---
+
+VEU: lluc
+IMATGE: Pla mitjà de Carlos, dret al costat del divà i sorprés. Gina apareix només de perfil al davant. Carlos assenyala el balcó obert i el rellotge de la paret. Només hi ha Carlos i Gina al mateix gabinet. Estil còmic valencià de 1936.
+IMATGE_EN: Medium shot in the same 1936 sitting room, 2D period comic-book illustration. Exactly two people: Carlos stands beside the velvet divan with a surprised expression and points toward the open balcony and the clock; Gina is visible only in profile in the foreground. Same clothes, same room, same spring light. No other people, no children, no crowd, no street, no modern objects, no photorealism.
+¿I vols eixir a competir? En aquesta casa ningú no ha pensat mai en una cosa així.
+
+---
+
+VEU: gina
+IMATGE: Pla detall de Gina al costat d'una taula del gabinet. Sobre la taula hi ha un quadern obert amb un dibuix senzill d'una javelina i una cinta mètrica. Carlos apareix només de perfil al fons. Només hi ha dos adults. Estil còmic valencià de 1936.
+IMATGE_EN: Medium close-up in the same sitting room, 2D period comic-book illustration. Exactly two adults: Gina stands beside a small table and opens a notebook showing a simple drawing of a javelin and a measuring tape; Carlos appears only in side profile in the background. Same 1936 clothes and room. No readable writing, no extra people, no children, no crowd, no modern objects, no photorealism.
+—No vull trencar la casa, Carlos. Vull obrir una porta que sempre ha estat tancada.
+
+---
+
+VEU: lluc
+IMATGE: Pla mitjà de Carlos obrint la porta del balcó. Gina està dreta darrere d'ell amb el quadern contra el pit. La llum de primavera entra al gabinet. Només hi ha Carlos i Gina. Estil còmic valencià de 1936.
+IMATGE_EN: Medium shot in the same sitting room, 2D period comic-book illustration. Exactly two people: Carlos opens the balcony door, while Gina stands behind him holding the notebook against her chest. Strong spring sunlight enters the room. Same clothes, divan and clock. No other people, no children, no crowd, no street scene, no modern objects, no photorealism.
+Potser la porta no estava tancada. Potser només esperava que algú s'atrevira a obrir-la.
+
+---
+
+VEU: gina
+IMATGE: Pla mitjà de Gina al balcó obert, preparada per a eixir, mentre Carlos la mira des de l'interior. Gina sosté una javelina de fusta senzilla. Només hi ha els dos personatges, sense ningú al carrer. Estil còmic valencià de 1936.
+IMATGE_EN: Medium shot at the open balcony of the same 1936 house, 2D period comic-book illustration. Exactly two people: Gina stands ready to step outside, holding one simple wooden javelin; Carlos watches her from inside the room. The street below is empty and no other people are visible. Same clothes, same spring light, no crowd, no children, no modern objects, no photorealism.
+No et demane que em deixes ser una altra. Et demane que em deixes ser jo.
+
+---
+
+VEU: lluc
+IMATGE: Pla general final del gabinet i del balcó obert. Gina ix al balcó amb la javelina i Carlos es queda dins, dret al costat de la porta. Els dos es miren amb respecte. El rellotge continua marcant les tres i la llum de primavera ompli l'habitació. Només hi ha Carlos i Gina. Estil còmic valencià de 1936.
+IMATGE_EN: Final wide shot of the same sitting room and open balcony, 2D period comic-book illustration with clear ink lines and muted flat colors. Exactly two people: Gina steps onto the balcony holding the simple wooden javelin, while Carlos stands inside beside the open door. They look at each other with mutual respect. The clock still shows three o'clock and spring light fills the room. No other people, no children, no crowd, no modern objects, no photorealism.
+Carlos mira la porta oberta i somriu. Per primera vegada, la casa sembla prou gran per als dos.

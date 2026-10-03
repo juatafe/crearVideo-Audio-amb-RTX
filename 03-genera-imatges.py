@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import copy
+import hashlib
 import json
 import os
+import secrets
 import shutil
 import time
 import urllib.request
@@ -66,6 +68,19 @@ scenes = json.loads(manifest_path.read_text(encoding="utf-8"))
 base_workflow = json.loads(workflow_path.read_text(encoding="utf-8"))
 text_nodes, save_nodes = find_nodes(base_workflow)
 
+checkpoint_nodes = [
+    node for node in base_workflow.values()
+    if node.get("class_type") == "CheckpointLoaderSimple"
+]
+if checkpoint_nodes:
+    checkpoint_name = checkpoint_nodes[0].get("inputs", {}).get("ckpt_name", "")
+    if checkpoint_name.startswith("v1-5-pruned"):
+        print(
+            "AVÍS: el workflow usa el checkpoint base SD 1.5 "
+            f"({checkpoint_name}); per a millors il·lustracions, instal·la manualment "
+            "un checkpoint SD 1.5 de qualitat i canvia ckpt_name."
+        )
+
 # Convenció: primer CLIPTextEncode = positiu; segon, si existeix = negatiu.
 pos_node = text_nodes[0]
 neg_node = text_nodes[1] if len(text_nodes) > 1 else None
@@ -73,14 +88,38 @@ save_node = save_nodes[-1]
 
 for scene in scenes:
     target = ROOT / scene["image"]
-    if target.exists() and target.stat().st_size > 4096:
-        print(f"SKIP: {target.name} ja existeix")
-        continue
+    prompt_marker = target.with_suffix(target.suffix + ".prompt")
+    prompt_fingerprint = hashlib.sha256(
+        json.dumps({
+            "prompt": scene["image_prompt"],
+            "negative_prompt": scene.get("negative_prompt", ""),
+            "workflow": base_workflow,
+        }, sort_keys=True, ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
+    if target.exists() and target.is_file() and target.stat().st_size > 4096:
+        previous_fingerprint = (
+            prompt_marker.read_text(encoding="utf-8").strip()
+            if prompt_marker.exists()
+            else ""
+        )
+        if previous_fingerprint == prompt_fingerprint:
+            print(f"SKIP: {target.name} ja existeix")
+            continue
+        print(f"REGEN: {target.name} ha canviat el prompt o el workflow")
 
     wf = copy.deepcopy(base_workflow)
     wf[pos_node]["inputs"]["text"] = scene["image_prompt"]
     if neg_node:
         wf[neg_node]["inputs"]["text"] = scene.get("negative_prompt", "")
+    sampler_nodes = [
+        node for node in wf.values()
+        if node.get("class_type") == "KSampler"
+    ]
+    for sampler in sampler_nodes:
+        # Només arribem ací quan la imatge no existeix o és massa xicoteta.
+        # Una llavor nova fa que, si l'usuari esborra una imatge, la següent
+        # generació siga una variant nova i no una còpia exacta de l'anterior.
+        sampler["inputs"]["seed"] = secrets.randbelow(2**63)
     prefix = f"auto_{scene['id']}"
     wf[save_node]["inputs"]["filename_prefix"] = prefix
 
@@ -116,4 +155,5 @@ for scene in scenes:
     })
     with urllib.request.urlopen(f"{base_url}/view?{query}", timeout=60) as r:
         target.write_bytes(r.read())
+    prompt_marker.write_text(prompt_fingerprint + "\n", encoding="utf-8")
     print(f"OK: {target}")

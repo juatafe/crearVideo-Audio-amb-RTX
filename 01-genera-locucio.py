@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import json
+import hashlib
 import os
 import shlex
 import subprocess
@@ -43,9 +44,19 @@ if not tts_template:
     )
 
 for scene in scenes:
+    if scene.get("visual_only") or not scene.get("audio"):
+        print(f"SKIP: {scene['id']} és una escena només visual")
+        continue
     out = ROOT / scene["audio"]
+    voice = scene.get("voice", os.environ.get("TTS_VOICE", "quim"))
+    voice_marker = out.with_suffix(out.suffix + ".voice")
+    language = os.environ.get("TTS_LANGUAGE", "ca-va")
+    audio_fingerprint = hashlib.sha256(
+        f"{voice}\n{language}\n{scene['text']}".encode("utf-8")
+    ).hexdigest()
     out.parent.mkdir(parents=True, exist_ok=True)
-    if out.exists() and out.stat().st_size > 1024:
+    previous_fingerprint = voice_marker.read_text(encoding="utf-8").strip() if voice_marker.exists() else ""
+    if out.exists() and out.stat().st_size > 1024 and previous_fingerprint == audio_fingerprint:
         print(f"SKIP: {out.name} ja existeix")
         continue
 
@@ -56,16 +67,23 @@ for scene in scenes:
     try:
         cmd = tts_template.format(text_file=str(text_file), output_wav=str(out))
         print(f"TTS: {scene['id']}")
-        subprocess.run(cmd, shell=True, check=True, cwd=ROOT)
+        scene_env = os.environ.copy()
+        scene_env["TTS_VOICE"] = voice
+        subprocess.run(cmd, shell=True, check=True, cwd=ROOT, env=scene_env)
         if not out.exists() or out.stat().st_size < 1024:
             raise RuntimeError(f"El TTS no ha generat correctament {out}")
+        voice_marker.write_text(audio_fingerprint + "\n", encoding="utf-8")
     finally:
         text_file.unlink(missing_ok=True)
 
 concat_file = ROOT / "tmp" / "tts_concat.txt"
 concat_file.parent.mkdir(parents=True, exist_ok=True)
 concat_file.write_text(
-    "".join(f"file '{(ROOT / s['audio']).resolve()}'\n" for s in scenes),
+    "".join(
+        f"file '{(ROOT / s['audio']).resolve()}'\n"
+        for s in scenes
+        if not s.get("visual_only") and s.get("audio")
+    ),
     encoding="utf-8",
 )
 

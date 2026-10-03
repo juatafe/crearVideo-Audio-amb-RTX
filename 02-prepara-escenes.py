@@ -25,7 +25,12 @@ def load_env(path: Path):
 cfg = load_env(ROOT / "config.env")
 script_file = ROOT / cfg.get("SCRIPT_FILE", "guio/guio.txt")
 visual_style = cfg.get("VISUAL_STYLE", "cinematic illustration")
+character_bible = cfg.get("CHARACTER_BIBLE", "")
+visual_only_voice = cfg.get("VISUAL_ONLY_VOICE", "").strip().lower()
 negative_prompt = cfg.get("NEGATIVE_PROMPT", "text, watermark, logo, blurry, low quality")
+voice_directive = re.compile(r"(?im)^\s*(?:VEU|VOICE)\s*:\s*([A-Za-z0-9_.-]+)\s*$")
+image_directive = re.compile(r"(?im)^\s*(?:IMATGE|IMAGE)\s*:\s*(.+?)\s*$")
+image_english_directive = re.compile(r"(?im)^\s*(?:IMATGE_EN|IMAGE_EN)\s*:\s*(.+?)\s*$")
 
 if not script_file.exists():
     raise SystemExit(f"ERROR: no trobe el guió: {script_file}")
@@ -34,8 +39,14 @@ text = script_file.read_text(encoding="utf-8").strip()
 if not text:
     raise SystemExit("ERROR: el guió està buit.")
 
-# Separació preferent per delimitador explícit ---.
-blocks = [b.strip() for b in re.split(r"(?m)^\s*---\s*$", text) if b.strip()]
+# Separació preferent per delimitador explícit --- o per una nova directiva VEU:.
+blocks = []
+for explicit_block in re.split(r"(?m)^\s*---\s*$", text):
+    blocks.extend(
+        part.strip()
+        for part in re.split(r"(?im)(?=^\s*(?:VEU|VOICE)\s*:)", explicit_block)
+        if part.strip()
+    )
 
 # Si no hi ha delimitadors, fem paràgrafs no buits.
 if len(blocks) == 1:
@@ -46,18 +57,43 @@ if len(blocks) == 1:
 manifest = []
 for i, block in enumerate(blocks, 1):
     scene_id = f"{i:03d}"
-    prompt = (
-        f"{visual_style}. Scene inspired by this narration: {block}. "
-        "No written text in the image. Keep characters, clothing, setting and visual language coherent with adjacent scenes."
+    voice_match = voice_directive.search(block)
+    voice = voice_match.group(1) if voice_match else None
+    visual_only = bool(voice and voice.lower() == visual_only_voice)
+    image_match = image_directive.search(block)
+    image_description = image_match.group(1).strip() if image_match else ""
+    image_english_match = image_english_directive.search(block)
+    image_english_description = (
+        image_english_match.group(1).strip() if image_english_match else ""
     )
-    manifest.append({
+    narration = voice_directive.sub("", block, count=1).strip()
+    narration = image_directive.sub("", narration, count=1).strip()
+    narration = image_english_directive.sub("", narration, count=1).strip()
+    if not narration:
+        raise SystemExit(f"ERROR: l'escena {scene_id} no té text després de VEU:.")
+    visual_subject = image_english_description or image_description or narration
+    prompt = (
+        f"{visual_style}. {character_bible} Escena única i clara: {visual_subject}. "
+        "Mostra exclusivament els personatges que apareixen explícitament en aquesta escena; "
+        "no afegisques cap altre adult, xiquet, dona, home ni personatge del context. "
+        "Respecta estrictament el nombre de persones, el pla, la postura, l'acció i l'espai descrits. "
+        "Composició intencionada, acció visible, anatomia correcta, sense collage, sense multitud. "
+        "Sense text escrit dins de la imatge. Mantín la continuïtat d'espai, colors i vestuari només "
+        "per als personatges presents en aquesta escena."
+    )
+    scene = {
         "id": scene_id,
-        "text": block,
-        "audio": f"locucio/fragments/{scene_id}.wav",
+        "text": narration,
+        "audio": "" if visual_only else f"locucio/fragments/{scene_id}.wav",
         "image": f"imatges/{scene_id}.png",
         "image_prompt": prompt,
         "negative_prompt": negative_prompt,
-    })
+    }
+    if voice:
+        scene["voice"] = voice
+    if visual_only:
+        scene["visual_only"] = True
+    manifest.append(scene)
 
 out = ROOT / "manifest.json"
 out.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

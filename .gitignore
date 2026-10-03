@@ -6,7 +6,9 @@ locucio/*.wav
 locucio/*.mp3
 imatges/*.png
 imatges/*.jpg
+imatges/*.prompt
 video/*.mp4
+locucio/fragments/*.voice
 tmp/*
 !tmp/.gitkeep
 workflows/comfyui_api_workflow.json
