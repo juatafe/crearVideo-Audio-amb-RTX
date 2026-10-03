@@ -237,6 +237,26 @@ Eixida:
 video/final-15mb.mp4
 ```
 
+## 14. Supervisor i agents
+
+La branca `automation/openproject-supervisor` inclou agents i skills de VS Code/Copilot per automatitzar el flux complet:
+
+- `Video Supervisor`: coordina escenes, prompts, TTS, ComfyUI i validació.
+- `Scene Director`: revisa estructura, veus i continuïtat del guió.
+- `Visual Prompt Translator`: crea `IMATGE_EN:` sense modificar el diàleg.
+- `Image Quality Inspector`: comprova personatges, composició i resolució.
+- `Pipeline Runner`: executa les fases locals i diagnostica errors.
+
+També pots invocar el prompt `.github/prompts/run-video-supervisor.prompt.md`.
+
+La validació final és:
+
+```bash
+scripts/validate-video-project.sh
+```
+
+La documentació de la futura connexió amb OpenProject és a `docs/OPENPROJECT-AUTOMATION.md`. No es guarden tokens ni credencials en el repositori.
+
 Si el fitxer encara supera `TARGET_MB` per overhead del contenidor, el script fa un segon intent reduint lleugerament el bitrate.
 
 ## 9. Fer-ho tot seguit
