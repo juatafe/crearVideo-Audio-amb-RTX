@@ -90,7 +90,7 @@ sudo apt install -y ffmpeg python3 python3-venv python3-pip jq
 
 Els scripts de la plantilla utilitzen la llibreria estàndard de Python. Pots crear un entorn virtual si el teu motor TTS necessita dependències pròpies.
 
-La generació de veu depén del motor TTS que utilitzes. El script `01-genera-locucio.py` està preparat perquè pugues connectar Matxa TTS / projecte Aina mitjançant un comandament extern configurable. Açò evita lligar tota la plantilla a una versió concreta del model.
+La generació de veu usa Matxa/Aina per a català o valencià i Piper per a castellà. El model castellà predeterminat és `models/tts/piper/es_ES-davefx-medium.onnx`. Els models TTS no es pugen a Git.
 
 ## 3. Preparar un projecte nou
 
@@ -247,12 +247,13 @@ Els agents `Visual Prompt Translator` i `Image Quality Inspector` són els encar
 
 ### 1. Escriure el guió i el prompt visual
 
-Edita `guio/guio.txt`. Cada bloc separat per una línia amb `---` és una escena. La directiva `VEU:` indica la veu i el text que queda fora de les directives és el diàleg que es locutarà.
+Edita `guio/guio.txt`. Cada bloc separat per una línia amb `---` és una escena. Les directives `VEU:` i `IDIOMA:` indiquen la veu i l'idioma; el text que queda fora de les directives és el diàleg que es locutarà.
 
 No canvies el diàleg per millorar la imatge. Afig les instruccions visuals amb `IMATGE:` i, preferentment, la versió concreta per a SDXL amb `IMATGE_EN:`:
 
 ```text
 VEU: gina
+IDIOMA: ca-va
 IMATGE: Pla mitjà del poeta davant d'una plaça buida, una única persona visible,
 amb abric fosc i una estrela física al fons, sense text ni objectes moderns.
 IMATGE_EN: Medium shot of the same poet standing in an empty square, exactly one
@@ -260,6 +261,19 @@ visible person, dark coat, a physical star in the background, no text, no modern
 
 He arribat a la plaça i encara no la veig.
 ```
+
+Per a castellà:
+
+```text
+VEU: es_ES-davefx-medium
+IDIOMA: es-ES
+IMATGE: Plano medio de una persona frente a una plaza vacía, sin texto.
+IMATGE_EN: Medium shot of one person in an empty square, no text.
+
+Este texto se locutará en castellano.
+```
+
+El pipeline selecciona Matxa/Aina automàticament per a `ca-*` i Piper per a `es-*`. Si no poses `IDIOMA:`, s'utilitza `TTS_LANGUAGE` de `config.env`.
 
 Un prompt visual útil especifica, en este ordre aproximat:
 
@@ -353,7 +367,7 @@ El projecte calcula una empremta de generació amb el guió, l'estil visual, el 
 | `IMATGE:` o `IMATGE_EN:` d'una escena | Executa `02-prepara-escenes.py`, revisa `manifest.json` i després `03-genera-imatges.py` | Les imatges amb prompt canviat; després cal remuntar el vídeo |
 | `VISUAL_STYLE`, `CHARACTER_BIBLE` o `NEGATIVE_PROMPT` | Executa el pipeline complet | Imatges i, per coherència, veu i vídeo de treball |
 | `CHECKPOINT_NAME` o resolució de ComfyUI | Comprova el workflow i executa el pipeline complet | Imatges i vídeo |
-| `TTS_VOICE`, `TTS_LANGUAGE` o directiva `VEU:` | Executa el pipeline complet | Locució i vídeo |
+| `TTS_VOICE`, `TTS_LANGUAGE`, `IDIOMA:` o directiva `VEU:` | Executa el pipeline complet | Locució i vídeo |
 | `MASTER_WIDTH` / `MASTER_HEIGHT` | Executa `04-munta-video.sh` i `05-comprimeix-15mb.sh` | Només màster i vídeo comprimit |
 | `FINAL_HEIGHT`, `FINAL_FPS`, `TARGET_MB` o bitrate | Executa `05-comprimeix-15mb.sh` | Només vídeo comprimit |
 | Música (`USE_MUSIC`, `MUSIC_FILE`, `MUSIC_VOLUME`) | Executa `04-munta-video.sh` i després `05-comprimeix-15mb.sh` | Màster i vídeo comprimit |
@@ -465,7 +479,7 @@ Al final pregunta si vols eliminar els fitxers de treball: imatges generades, fr
 La branca `opencode` i la configuració de VS Code/Copilot inclouen agents i skills per automatitzar el flux complet:
 
 - `Video Supervisor`: coordina escenes, prompts, TTS, ComfyUI i validació.
-- `Scene Director`: transforma text lliure en un guió amb escenes, veus i descripcions visuals en valencià.
+- `Scene Director`: transforma text lliure en un guió amb escenes, veus, idiomes i descripcions visuals.
 - `Visual Prompt Translator`: crea `IMATGE_EN:` sense modificar el diàleg.
 - `Image Quality Inspector`: comprova personatges, composició i resolució.
 - `Pipeline Runner`: executa les fases locals i diagnostica errors.

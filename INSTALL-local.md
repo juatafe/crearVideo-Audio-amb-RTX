@@ -41,7 +41,17 @@ El workflow actiu usa `DreamShaperXL_Turbo-Lightning.safetensors`, instal·lat a
 - [Model Matxa-TTS català multiaccent](https://huggingface.co/projecte-aina/matxa-tts-cat-multiaccent)
 - [Demo Matxa + alVoCat](https://huggingface.co/spaces/projecte-aina/matxa-alvocat-tts-ca)
 
-L’API es prepara amb la imatge Docker `projecteaina/tts-api:latest`. El model Matxa pot estar subjecte a accés autenticat i les condicions d’ús de les veus; consulta sempre la documentació oficial. La configuració predeterminada usa la veu `quim` i l’idioma `ca-va`; es poden canviar `TTS_VOICE`, `TTS_LANGUAGE`, `TTS_API_URL` i `TTS_IMAGE` a `config.env`.
+L’API es prepara amb la imatge Docker `projecteaina/tts-api:latest`. El model Matxa pot estar subjecte a accés autenticat i les condicions d’ús de les veus; consulta sempre la documentació oficial. La configuració predeterminada usa la veu `quim` i l’idioma `ca-va`. Per a castellà, el projecte usa Piper i el model `models/tts/piper/es_ES-davefx-medium.onnx`. Es poden canviar `TTS_VOICE`, `TTS_LANGUAGE`, `TTS_API_URL`, `PIPER_BIN` i `PIPER_MODEL` a `config.env`.
+
+Per instal·lar Piper i descarregar la veu castellana:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+mkdir -p models/tts/piper
+.venv/bin/python -m piper.download_voices \
+	--download-dir models/tts/piper es_ES-davefx-medium
+```
 
 ## Executar
 
@@ -69,7 +79,7 @@ VEU: gina
 La veu de la narradora descriu què passa a continuació.
 ```
 
-La directiva `VEU:` no es narra ni apareix en el prompt de la imatge. Sense directiva, s’usa la veu global `TTS_VOICE` de `config.env`. Per a la descripció indicada, pots escriure exactament el primer bloc anterior.
+Les directives `VEU:` i `IDIOMA:` no es narren ni apareixen en el prompt de la imatge. Sense `IDIOMA:`, s’usa `TTS_LANGUAGE` de `config.env`. Les escenes `ca-*` van a Matxa/Aina i les `es-*` a Piper.
 
 Quan canvies el text, la veu o l’idioma, el programa detecta el canvi i regenera automàticament el fragment WAV. No cal eliminar els àudios manualment.
 

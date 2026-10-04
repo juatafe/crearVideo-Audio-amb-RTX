@@ -38,6 +38,7 @@ if not MANIFEST.exists():
 
 scenes = json.loads(MANIFEST.read_text(encoding="utf-8"))
 tts_template = os.environ.get("TTS_COMMAND", "").strip()
+tts_spanish_template = os.environ.get("TTS_COMMAND_ES", "").strip()
 
 if not tts_template:
     bridge = ROOT / "scripts" / "matxa_tts.py"
@@ -60,9 +61,15 @@ for scene in scenes:
     out = ROOT / scene["audio"]
     voice = scene.get("voice", os.environ.get("TTS_VOICE", "quim"))
     voice_marker = out.with_suffix(out.suffix + ".voice")
-    language = os.environ.get("TTS_LANGUAGE", "ca-va")
+    language = scene.get("language", os.environ.get("TTS_LANGUAGE", "ca-va"))
+    command_template = tts_spanish_template if language.lower().startswith("es") else tts_template
+    if not command_template:
+        raise SystemExit(
+            f"ERROR: no hi ha TTS_COMMAND_ES per a l'escena {scene['id']} "
+            f"amb idioma {language}."
+        )
     audio_fingerprint = hashlib.sha256(
-        f"{voice}\n{language}\n{scene['text']}".encode("utf-8")
+        f"{voice}\n{language}\n{os.environ.get('PIPER_MODEL', '')}\n{scene['text']}".encode("utf-8")
     ).hexdigest()
     out.parent.mkdir(parents=True, exist_ok=True)
     previous_fingerprint = voice_marker.read_text(encoding="utf-8").strip() if voice_marker.exists() else ""
@@ -75,10 +82,11 @@ for scene in scenes:
         text_file = Path(f.name)
 
     try:
-        cmd = tts_template.format(text_file=str(text_file), output_wav=str(out))
+        cmd = command_template.format(text_file=str(text_file), output_wav=str(out))
         print(f"TTS: {scene['id']}")
         scene_env = os.environ.copy()
         scene_env["TTS_VOICE"] = voice
+        scene_env["TTS_LANGUAGE"] = language
         subprocess.run(cmd, shell=True, check=True, cwd=ROOT, env=scene_env)
         if not out.exists() or out.stat().st_size < 1024:
             raise RuntimeError(f"El TTS no ha generat correctament {out}")

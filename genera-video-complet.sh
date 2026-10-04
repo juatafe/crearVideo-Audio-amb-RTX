@@ -16,6 +16,8 @@ _TTS_IMAGE="${TTS_IMAGE-}"
 _TTS_PORT="${TTS_PORT-}"
 _TTS_VOICE="${TTS_VOICE-}"
 _TTS_LANGUAGE="${TTS_LANGUAGE-}"
+_PIPER_BIN="${PIPER_BIN-}"
+_PIPER_MODEL="${PIPER_MODEL-}"
 
 mkdir -p tmp
 
@@ -39,6 +41,8 @@ fi
 [[ -n "$_TTS_PORT" ]] && TTS_PORT="$_TTS_PORT"
 [[ -n "$_TTS_VOICE" ]] && TTS_VOICE="$_TTS_VOICE"
 [[ -n "$_TTS_LANGUAGE" ]] && TTS_LANGUAGE="$_TTS_LANGUAGE"
+[[ -n "$_PIPER_BIN" ]] && PIPER_BIN="$_PIPER_BIN"
+[[ -n "$_PIPER_MODEL" ]] && PIPER_MODEL="$_PIPER_MODEL"
 
 : "${COMFYUI_DIR:=$HOME/Projectes/ComfyUI}"
 : "${COMFYUI_URL:=http://127.0.0.1:8188}"
@@ -50,6 +54,8 @@ fi
 : "${TTS_PORT:=8000}"
 : "${TTS_VOICE:=quim}"
 : "${TTS_LANGUAGE:=ca-va}"
+: "${PIPER_BIN:=.venv/bin/piper}"
+: "${PIPER_MODEL:=models/tts/piper/es_ES-davefx-medium.onnx}"
 
 wait_http() {
   local url="$1"
@@ -177,6 +183,8 @@ PY
 
 export TTS_API_URL TTS_VOICE TTS_LANGUAGE
 export TTS_COMMAND="python3 $ROOT/tmp/matxa_tts.py --text-file \"{text_file}\" --output \"{output_wav}\""
+export PIPER_BIN PIPER_MODEL
+export TTS_COMMAND_ES="python3 $ROOT/scripts/piper_tts.py --text-file \"{text_file}\" --output \"{output_wav}\""
 
 echo "=== 1/5 Preparant escenes ==="
 python3 02-prepara-escenes.py

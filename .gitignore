@@ -14,4 +14,5 @@ locucio/fragments/*.voice
 tmp/*
 !tmp/.gitkeep
 .project-state/
+models/tts/
 workflows/comfyui_api_workflow.json

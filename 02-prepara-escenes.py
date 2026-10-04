@@ -30,6 +30,7 @@ character_bible = cfg.get("CHARACTER_BIBLE", "")
 visual_only_voice = cfg.get("VISUAL_ONLY_VOICE", "").strip().lower()
 negative_prompt = cfg.get("NEGATIVE_PROMPT", "text, watermark, logo, blurry, low quality")
 voice_directive = re.compile(r"(?im)^\s*(?:VEU|VOICE)\s*:\s*([A-Za-z0-9_.-]+)\s*$")
+language_directive = re.compile(r"(?im)^\s*(?:IDIOMA|LANGUAGE)\s*:\s*([A-Za-z0-9_.-]+)\s*$")
 image_directive = re.compile(r"(?im)^\s*(?:IMATGE|IMAGE)\s*:\s*(.+?)\s*$")
 image_english_directive = re.compile(r"(?im)^\s*(?:IMATGE_EN|IMAGE_EN)\s*:\s*(.+?)\s*$")
 
@@ -99,6 +100,7 @@ generation_settings = {
     "visual_only_voice": visual_only_voice,
     "tts_voice": cfg.get("TTS_VOICE", ""),
     "tts_language": cfg.get("TTS_LANGUAGE", ""),
+    "piper_model": cfg.get("PIPER_MODEL", ""),
 }
 generation_fingerprint = hashlib.sha256(
     json.dumps(generation_settings, sort_keys=True, ensure_ascii=False).encode("utf-8")
@@ -132,6 +134,8 @@ for i, block in enumerate(blocks, 1):
     scene_id = f"{i:03d}"
     voice_match = voice_directive.search(block)
     voice = voice_match.group(1) if voice_match else None
+    language_match = language_directive.search(block)
+    language = language_match.group(1) if language_match else cfg.get("TTS_LANGUAGE", "ca-va")
     visual_only = bool(voice and voice.lower() == visual_only_voice)
     image_match = image_directive.search(block)
     image_description = image_match.group(1).strip() if image_match else ""
@@ -140,6 +144,7 @@ for i, block in enumerate(blocks, 1):
         image_english_match.group(1).strip() if image_english_match else ""
     )
     narration = voice_directive.sub("", block, count=1).strip()
+    narration = language_directive.sub("", narration, count=1).strip()
     narration = image_directive.sub("", narration, count=1).strip()
     narration = image_english_directive.sub("", narration, count=1).strip()
     if not narration:
@@ -164,6 +169,7 @@ for i, block in enumerate(blocks, 1):
     }
     if voice:
         scene["voice"] = voice
+    scene["language"] = language
     if visual_only:
         scene["visual_only"] = True
     manifest.append(scene)
