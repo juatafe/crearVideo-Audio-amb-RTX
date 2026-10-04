@@ -58,6 +58,58 @@ la meua confirmació abans de generar veu o imatges:
 [enganxa ací la història, poesia o narració]
 ```
 
+### Demanar un vídeo en dos llengües
+
+Indica clarament que vols un vídeo bilingüe i especifica l'idioma de cada veu o
+escena. El text que escrigues en valencià/català es locutarà amb Matxa/Aina i el
+text que escrigues en castellà amb Piper. No demanes només "tradueix-ho" si vols
+conservar literalment el diàleg: proporciona les dues versions o autoritza
+explícitament la traducció abans de generar el guió.
+
+Una petició bilingüe completa pot ser:
+
+```text
+Vull un vídeo breu bilingüe en valencià i castellà, en format vertical i amb
+estil de conte il·lustrat càlid.
+
+La narració del narrador ha de ser en valencià, amb veu femenina `gina` i
+idioma `ca-va`. La iaia parla en castellà, amb la veu castellana Piper
+`es_ES-davefx-medium` i idioma `es-ES`.
+
+Escena 1: el narrador descriu en valencià un poble sec al matí.
+Escena 2: la iaia mira la néta i diu exactament: "Planta este árbol y cuídalo
+con paciencia."
+Escena 3: el narrador torna al valencià i descriu el poble verd mesos després.
+
+Conserva exactament cada frase que s'ha de locutar i no corregisques ni
+traduïsques els diàlegs. Proposa primer el resum d'escenes i espera la meua
+confirmació. Cada escena ha d'indicar `VEU:` i `IDIOMA:`; després `Visual Prompt
+Translator` crearà `IMATGE_EN:` sense canviar el diàleg ni l'acció visual.
+```
+
+El supervisor convertirà aquesta petició en blocs semblants a:
+
+```text
+VEU: gina
+IDIOMA: ca-va
+IMATGE: Pla general d'un poble sec al matí, sense persones extra.
+IMATGE_EN: Wide shot of a dry village in the morning, no extra people.
+
+El poble encara espera la pluja.
+---
+VEU: es_ES-davefx-medium
+IDIOMA: es-ES
+IMATGE: Pla mitjà de la iaia parlant amb la seua néta al costat d'un arbre.
+IMATGE_EN: Medium shot of a grandmother speaking to her granddaughter beside a tree.
+
+Planta este árbol y cuídalo con paciencia.
+```
+
+Per a una narració sencera en castellà, n'hi ha prou amb indicar que tot el
+vídeo serà `es-ES`; no cal afegir `IDIOMA:` a cada escena si uses el valor global
+de `config.env`. Per a barrejar idiomes dins del mateix vídeo, sí que cal
+indicar `IDIOMA:` en cada bloc.
+
 ## 1. Estructura
 
 ```text
