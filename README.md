@@ -179,7 +179,117 @@ Les imatges acabaran dins de `imatges/` amb noms:
 
 Si preferixes generar-les manualment, només has de posar-les tu mateix en eixa carpeta amb eixos noms.
 
-## 7. Muntar el vídeo mestre
+### Com millorar l'aspecte de les imatges
+
+La font principal és `guio/guio.txt`: escriu una descripció concreta en `IMATGE_EN:` indicant enquadrament, lloc, acció, nombre exacte de persones, vestuari i elements que no han d'aparéixer. El parser conserva el diàleg i construeix el prompt amb:
+
+- `VISUAL_STYLE`, `CHARACTER_BIBLE` i `NEGATIVE_PROMPT` de `config.env`;
+- el checkpoint indicat en `CHECKPOINT_NAME`;
+- els passos, CFG, sampler i resolució de `workflows/comfyui_api_workflow.json`.
+
+Els agents `Visual Prompt Translator` i `Image Quality Inspector` són els encarregats de revisar prompts i imatges. `Video Supervisor` els coordina, però no s'executen automàticament amb l'script de terminal. Després de generar, convé revisar les imatges abans del muntatge i regenerar només les escenes amb errors objectius.
+
+## 7. Del prompt al vídeo: procediment complet
+
+### 1. Escriure el guió i el prompt visual
+
+Edita `guio/guio.txt`. Cada bloc separat per una línia amb `---` és una escena. La directiva `VEU:` indica la veu i el text que queda fora de les directives és el diàleg que es locutarà.
+
+No canvies el diàleg per millorar la imatge. Afig les instruccions visuals amb `IMATGE:` i, preferentment, la versió concreta per a SDXL amb `IMATGE_EN:`:
+
+```text
+VEU: gina
+IMATGE: Pla mitjà del poeta davant d'una plaça buida, una única persona visible,
+amb abric fosc i una estrela física al fons, sense text ni objectes moderns.
+IMATGE_EN: Medium shot of the same poet standing in an empty square, exactly one
+visible person, dark coat, a physical star in the background, no text, no modern objects.
+
+He arribat a la plaça i encara no la veig.
+```
+
+Un prompt visual útil especifica, en este ordre aproximat:
+
+- enquadrament i orientació: `wide shot`, `medium shot`, `close-up`, `vertical composition`;
+- lloc i moment: plaça, taller, camí, interior, nit o dia;
+- acció principal i postura visible;
+- nombre exacte de personatges i continuïtat: `exactly one person`, `same two companions`;
+- vestuari i elements que han de continuar;
+- exclusions: persones extra, xiquets, animals, objectes moderns i text escrit.
+
+Evita prompts abstractes com “una escena bonica” o amb diverses accions alhora. Una escena ha de tindre una acció visual fàcil de llegir. Usa `IMATGE_EN:` per a donar a ComfyUI una descripció anglesa clara; el diàleg continua en valencià/català.
+
+### 2. Revisar i preparar les escenes
+
+Després de modificar el guió o els prompts, executa:
+
+```bash
+python3 02-prepara-escenes.py
+```
+
+Revisa `manifest.json`. Cada entrada ha de tindre com a mínim `id`, `text`, `image`, `image_prompt`, `negative_prompt` i, si té locució, `audio`. Comprova especialment que el camp `text` conserva exactament el diàleg i que cada escena té el nombre correcte de personatges.
+
+Si vols inspeccionar el prompt final abans de generar, obri `manifest.json` i busca `image_prompt`. El parser combina la descripció de `IMATGE_EN:` amb `VISUAL_STYLE`, `CHARACTER_BIBLE` i `NEGATIVE_PROMPT` de `config.env`.
+
+### 3. Revisar amb els agents
+
+Per a una revisió assistida des de VS Code/Copilot, usa `Video Supervisor` i indica que ha d'utilitzar `guio/guio.txt`. El flux recomanat és:
+
+1. `Scene Director`: comprova blocs, veus, diàleg i continuïtat.
+2. `Visual Prompt Translator`: millora `IMATGE_EN:` sense tocar el diàleg.
+3. `Image Quality Inspector`: revisa resolució, enquadrament, persones extra, text espuri i coherència visual.
+4. `Pipeline Runner`: executa les fases i diagnostica errors de TTS, ComfyUI o FFmpeg.
+
+Els agents proposen canvis, però la generació real usa els scripts del projecte. Si una imatge és estèticament millorable però representa correctament l'escena, marca-la com a `REVIEW`; reserva `BLOCKED` per a fitxers corruptes, escenes equivocades o errors objectius.
+
+### 4. Generar el vídeo complet
+
+Quan ComfyUI, Docker/TTS, Python i FFmpeg estiguen disponibles, executa:
+
+```bash
+./genera-video-complet.sh
+```
+
+El procediment fa, en ordre:
+
+1. prepara `manifest.json`;
+2. genera els fragments de veu i `locucio/locucio.wav`;
+3. genera les imatges en `imatges/` mitjançant ComfyUI;
+4. munta `video/master.mp4`;
+5. crea `video/final-15mb.mp4`;
+6. executa `scripts/validate-video-project.sh`;
+7. arxiva el resultat en `videos-generats/PROJECT_NAME-data-hora/`.
+
+La validació tècnica ha de passar abans que el vídeo es considere acabat. Després fes també la revisió visual de l'agent `Image Quality Inspector` o revisa manualment les imatges.
+
+### 5. Regenerar només una part
+
+Si el guió no ha canviat i ja tens la veu, pots evitar el TTS:
+
+```bash
+SKIP_TTS=1 ./genera-video-complet.sh
+```
+
+Si les imatges ja són correctes, evita ComfyUI:
+
+```bash
+SKIP_IMAGES=1 ./genera-video-complet.sh
+```
+
+Per regenerar una escena concreta, modifica el seu `IMATGE_EN:` o `image_prompt`, executa `02-prepara-escenes.py` i torna a executar `03-genera-imatges.py`. Les escenes amb el mateix prompt i workflow es reutilitzen; les que han canviat es regeneren.
+
+### 6. Solucionar errors habituals
+
+`falta manifest.json`: executa `python3 02-prepara-escenes.py`.
+
+`ComfyUI no respon`: inicia ComfyUI o revisa `COMFYUI_URL`, `COMFYUI_DIR` i `COMFYUI_VENV` en `config.env`.
+
+`falta la locució`: comprova TTS, `TTS_COMMAND` i que existisca `locucio/locucio.wav` o els fragments individuals.
+
+`resolució incorrecta`: comprova que `EmptyLatentImage` del workflow i `IMAGE_WIDTH`/`IMAGE_HEIGHT` siguen coherents.
+
+`persones extra o estil inconsistent`: millora `IMATGE_EN:`, reforça `CHARACTER_BIBLE` i `NEGATIVE_PROMPT`, i regenera només les escenes afectades.
+
+## 8. Muntar el vídeo mestre
 
 Executa:
 
@@ -207,7 +317,7 @@ video/master.mp4
 
 El màster convé conservar-lo sempre en bona qualitat.
 
-## 8. Comprimir automàticament a menys de 15 MB
+## 9. Comprimir automàticament a menys de 15 MB
 
 Executa:
 
@@ -237,7 +347,13 @@ Eixida:
 video/final-15mb.mp4
 ```
 
-## 14. Supervisor i agents
+## 10. Arxiu i neteja
+
+`./genera-video-complet.sh` conserva automàticament cada vídeo acabat en una carpeta nova dins de `videos-generats/`, amb el nom `PROJECT_NAME-data-hora`. Guarda el vídeo comprimit i el `manifest.json` de la mateixa execució; estes carpetes no es toquen quan es prepara un guió nou.
+
+Al final pregunta si vols eliminar els fitxers de treball: imatges generades, fragments d'àudio, vídeos intermedis i fitxers temporals. Respon `y` o `s` per netejar-los, o simplement `Enter` per conservar-los.
+
+## 11. Supervisor i agents
 
 La branca `automation/openproject-supervisor` inclou agents i skills de VS Code/Copilot per automatitzar el flux complet:
 
@@ -259,7 +375,7 @@ La documentació de la futura connexió amb OpenProject és a `docs/OPENPROJECT-
 
 Si el fitxer encara supera `TARGET_MB` per overhead del contenidor, el script fa un segon intent reduint lleugerament el bitrate.
 
-## 9. Fer-ho tot seguit
+## 12. Fer-ho tot seguit
 
 Una vegada configurat el TTS i ComfyUI:
 
@@ -274,6 +390,8 @@ Executarà:
 3. `03-genera-imatges.py`
 4. `04-munta-video.sh`
 5. `05-comprimeix-15mb.sh`
+6. `scripts/validate-video-project.sh`
+7. arxiu del vídeo i pregunta de neteja
 
 També pots saltar passos:
 
@@ -291,7 +409,7 @@ SKIP_TTS=1 SKIP_IMAGES=1 ./genera-video-complet.sh
 
 Açò és útil quan ja tens la veu o les imatges i no vols que el pobre ordinador torne a pintar trenta castells perquè sí.
 
-## 10. Música de fons
+## 13. Música de fons
 
 En `config.env`:
 
@@ -303,7 +421,7 @@ MUSIC_VOLUME=0.16
 
 El muntatge farà loop de la música i la mesclarà per davall de la veu.
 
-## 11. Variables principals de `config.env`
+## 14. Variables principals de `config.env`
 
 | Variable | Funció |
 |---|---|
@@ -324,7 +442,7 @@ MASTER_WIDTH=1920
 MASTER_HEIGHT=1080
 ```
 
-## 12. Recomanació de treball
+## 15. Recomanació de treball
 
 Conserva sempre:
 
@@ -343,7 +461,7 @@ video/youtube.mp4
 
 El màster és la còpia bona. No té massa sentit comprimir a 15 MB i després usar eixa versió per tornar a comprimir; això és com fotocopiar una fotocòpia d'una fotocòpia i esperar que aparega el 4K per intervenció divina.
 
-## 13. Ordre ràpida
+## 16. Ordre ràpida
 
 ```bash
 nano guio/guio.txt
@@ -351,8 +469,14 @@ nano config.env
 ./genera-video-complet.sh
 ```
 
-I el resultat final serà:
+El resultat temporal serà:
 
 ```text
 video/final-15mb.mp4
+```
+
+La còpia conservada quedarà en una carpeta nova dins de:
+
+```text
+videos-generats/
 ```
