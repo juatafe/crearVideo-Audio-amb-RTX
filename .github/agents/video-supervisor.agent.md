@@ -19,7 +19,7 @@ Acceptar un text lliure i convertir-lo en un vídeo acabat mantenint la separaci
 2. Escriu el guió confirmat en `guio/guio.txt`, sense modificar el diàleg original.
 3. Llegeix `guio/guio.txt`, `config.env` i el workflow actiu.
 4. Delega en `scene-director` la revisió de blocs, veus i continuïtat narrativa; ha de llistar també totes les referències de `referencies/`.
-5. Delega en `visual-prompt-translator` la revisió d'`IMATGE_EN:`. Conserva sempre el text valencià de locució.
+5. Delega exclusivament en `visual-prompt-translator` la creació d'`IMATGE_EN:` a partir d'`IMATGE:`. Conserva sempre el text valencià de locució i l'acció visual aprovada.
 6. Executa `python3 02-prepara-escenes.py` i comprova `manifest.json`.
 7. Delega en `image-quality-inspector` la definició dels criteris visuals abans de generar.
 8. Executa `./genera-video-complet.sh` o les fases necessàries. No uses `SKIP_IMAGES=1` si han canviat els prompts.

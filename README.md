@@ -462,10 +462,10 @@ Al final pregunta si vols eliminar els fitxers de treball: imatges generades, fr
 
 ## 12. Supervisor i agents
 
-La branca `automation/openproject-supervisor` inclou agents i skills de VS Code/Copilot per automatitzar el flux complet:
+La branca `opencode` i la configuració de VS Code/Copilot inclouen agents i skills per automatitzar el flux complet:
 
 - `Video Supervisor`: coordina escenes, prompts, TTS, ComfyUI i validació.
-- `Scene Director`: transforma text lliure en un guió amb escenes, veus i prompts visuals.
+- `Scene Director`: transforma text lliure en un guió amb escenes, veus i descripcions visuals en valencià.
 - `Visual Prompt Translator`: crea `IMATGE_EN:` sense modificar el diàleg.
 - `Image Quality Inspector`: comprova personatges, composició i resolució.
 - `Pipeline Runner`: executa les fases locals i diagnostica errors.

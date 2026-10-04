@@ -12,7 +12,7 @@ user-invocable: true
 1. Read `guio/guio.txt` and identify `VEU:`, `IMATGE:`, `IMATGE_EN:` and `---` boundaries.
 2. Keep spoken text exactly as authored.
 3. Require one visual action and one camera framing per scene.
-4. Write `IMATGE_EN:` in precise English for SDXL.
+4. If the workflow uses separate agents, pass the approved `IMATGE:` to `Visual Prompt Translator`; that agent alone writes `IMATGE_EN:` in precise English for SDXL.
 5. State the exact number and identity of people.
 6. Run `python3 02-prepara-escenes.py`.
 7. Inspect `manifest.json` and reject missing or contradictory prompts.
