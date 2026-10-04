@@ -9,6 +9,7 @@ imatges/*.jpg
 imatges/*.prompt
 imatges/**/*.png
 video/*.mp4
+videos-generats/
 locucio/fragments/*.voice
 tmp/*
 !tmp/.gitkeep
