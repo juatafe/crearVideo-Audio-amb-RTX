@@ -1,46 +1,143 @@
-VEU: lluc
-IMATGE: Pla general de l'interior d'un gabinet de família burgesa valenciana l'any 1936. Carlos està assegut tot sol en un divà de vellut i té aire cansat. Hi ha un rellotge que marca les tres, una porta a l'esquerra i un balcó obert amb llum de primavera. Estil còmic valencià de 1936.
-IMATGE_EN: Wide shot of the same bourgeois Valencian family sitting room interior in 1936, 2D period comic-book illustration, clear black ink lines and muted flat colors. Exactly one person: Carlos, a slim young blond man with neatly swept-back blond hair, wearing a dark 1936 bourgeois suit, sitting alone on a velvet divan with a tired expression. A clock shows three o'clock; a closed door is on the left and an open balcony lets in spring sunlight. Interior only, no street, no crowd, no women, no children, no extra people, no modern objects, no photorealism.
-¿I per què no ho fas?
-
----
-
 VEU: gina
-IMATGE: Pla mitjà de Gina, la mateixa dona jove, expressiva i segura, amb cabells foscos ondulats i vestit burgés clar de 1936. Està dreta al gabinet i parla cap a Carlos, que apareix només de perfil al fons. Només hi ha Carlos i Gina. Estil còmic valencià de 1936.
-IMATGE_EN: Medium shot in the same sitting room, 2D period comic-book illustration. Exactly two people: Gina, a young confident woman with wavy dark hair and a light 1936 bourgeois dress, standing and speaking; Carlos, the same slim blond man in the same dark suit, visible only in side profile in the background. Same divan, clock, left door and open balcony. Interior only, no other people, no children, no crowd, no modern objects, no photorealism.
-Perquè soc dona. I em conforme amb ser dona. Al meu gust, tiraria a la jabalina, però he d'endolcir taronges. He de i vull.
+IMATGE: Pla general horitzontal d’una plaça buida i desconeguda, amb una estrela física plantada al centre, sense inscripcions ni text visible, ambient de misteri i descoberta, il·lustració 2D valenciana de còmic, línia negra, colors terrosos apagats, sense persones ni objectes moderns.
+IMATGE_EN: Wide horizontal establishing shot of an empty unfamiliar square with a physical star planted in the center, no inscription or readable text, mysterious discovery mood, flat 2D Valencian comic-book illustration, hand-inked black line art, muted earth tones, no people or modern objects.
 
+A la caça de l’estrela perduda.
+
+M’han dit que hi ha una estrela
+
+amb el meu nom,
+
+plantada enmig d’una plaça
+
+que encara no he trepitjat.
 ---
-
-VEU: lluc
-IMATGE: Pla mitjà de Carlos, dret al costat del divà i sorprés. Gina apareix només de perfil al davant. Carlos assenyala el balcó obert i el rellotge de la paret. Només hi ha Carlos i Gina al mateix gabinet. Estil còmic valencià de 1936.
-IMATGE_EN: Medium shot in the same 1936 sitting room, 2D period comic-book illustration. Exactly two people: Carlos stands beside the velvet divan with a surprised expression and points toward the open balcony and the clock; Gina is visible only in profile in the foreground. Same clothes, same room, same spring light. No other people, no children, no crowd, no street, no modern objects, no photorealism.
-¿I vols eixir a competir? En aquesta casa ningú no ha pensat mai en una cosa així.
-
----
-
 VEU: gina
-IMATGE: Pla detall de Gina al costat d'una taula del gabinet. Sobre la taula hi ha un quadern obert amb un dibuix senzill d'una javelina i una cinta mètrica. Carlos apareix només de perfil al fons. Només hi ha dos adults. Estil còmic valencià de 1936.
-IMATGE_EN: Medium close-up in the same sitting room, 2D period comic-book illustration. Exactly two adults: Gina stands beside a small table and opens a notebook showing a simple drawing of a javelin and a measuring tape; Carlos appears only in side profile in the background. Same 1936 clothes and room. No readable writing, no extra people, no children, no crowd, no modern objects, no photorealism.
-—No vull trencar la casa, Carlos. Vull obrir una porta que sempre ha estat tancada.
+IMATGE: El poeta ix de la plaça i inicia la recerca per un camí de terra, únic personatge visible, composició horitzontal ampla, estil de còmic 2D valencià, paleta terrosa apagada.
+IMATGE_EN: The poet leaves the square and begins the search along a dirt path, the only visible character, wide horizontal composition, flat 2D Valencian comic-book style, muted earth-tone palette.
 
+He eixit a buscar-la.
 ---
-
-VEU: lluc
-IMATGE: Pla mitjà de Carlos obrint la porta del balcó. Gina està dreta darrere d'ell amb el quadern contra el pit. La llum de primavera entra al gabinet. Només hi ha Carlos i Gina. Estil còmic valencià de 1936.
-IMATGE_EN: Medium shot in the same sitting room, 2D period comic-book illustration. Exactly two people: Carlos opens the balcony door, while Gina stands behind him holding the notebook against her chest. Strong spring sunlight enters the room. Same clothes, divan and clock. No other people, no children, no crowd, no street scene, no modern objects, no photorealism.
-Potser la porta no estava tancada. Potser només esperava que algú s'atrevira a obrir-la.
-
----
-
 VEU: gina
-IMATGE: Pla mitjà de Gina al balcó obert, preparada per a eixir, mentre Carlos la mira des de l'interior. Gina sosté una javelina de fusta senzilla. Només hi ha els dos personatges, sense ningú al carrer. Estil còmic valencià de 1936.
-IMATGE_EN: Medium shot at the open balcony of the same 1936 house, 2D period comic-book illustration. Exactly two people: Gina stands ready to step outside, holding one simple wooden javelin; Carlos watches her from inside the room. The street below is empty and no other people are visible. Same clothes, same spring light, no crowd, no children, no modern objects, no photorealism.
-No et demane que em deixes ser una altra. Et demane que em deixes ser jo.
+IMATGE: El mateix poeta segueix un rastre de fragments de marbre i pols que ix d’un taller auster i atemporal, sense maquinària moderna ni persones addicionals.
+IMATGE_EN: The same poet follows a trail of marble fragments and dust leading from a simple timeless workshop, with no modern machinery or additional people.
 
+He seguit el rastre del marbre,
+
+la pols del taller,
 ---
+VEU: gina
+IMATGE: Rastre de petjades solitàries que s’allunya del taller; el poeta les observa al fons, però no es mostra la persona que se’n va endur l’estrela, atmosfera d’incertesa.
+IMATGE_EN: A solitary trail of footprints leads away from the workshop; the poet observes it in the background, but the person who carried away the star is not shown, atmosphere of uncertainty.
 
-VEU: lluc
-IMATGE: Pla general final del gabinet i del balcó obert. Gina ix al balcó amb la javelina i Carlos es queda dins, dret al costat de la porta. Els dos es miren amb respecte. El rellotge continua marcant les tres i la llum de primavera ompli l'habitació. Només hi ha Carlos i Gina. Estil còmic valencià de 1936.
-IMATGE_EN: Final wide shot of the same sitting room and open balcony, 2D period comic-book illustration with clear ink lines and muted flat colors. Exactly two people: Gina steps onto the balcony holding the simple wooden javelin, while Carlos stands inside beside the open door. They look at each other with mutual respect. The clock still shows three o'clock and spring light fills the room. No other people, no children, no crowd, no modern objects, no photorealism.
-Carlos mira la porta oberta i somriu. Per primera vegada, la casa sembla prou gran per als dos.
+les petjades d’algú
+
+que se la va endur.
+---
+VEU: gina
+IMATGE: El poeta s’ajup i mira davall d’una peça de fusta en un espai auster, cerca infructuosa, l’estrela no apareix, sense figures ocultes ni text.
+IMATGE_EN: The poet crouches and looks beneath a wooden piece in an austere space, unsuccessful search, the star is absent, no hidden figures or text.
+
+Busque i no trobe.
+
+Mire davall la fusta,
+---
+VEU: gina
+IMATGE: Interior auster amb el poeta buscant darrere de portes i entre papers solts sense text llegible, ambient d’ocultació i abandó, sense objectes moderns.
+IMATGE_EN: Austere interior with the poet searching behind doors and among loose papers with no readable text, atmosphere of concealment and neglect, no modern objects.
+
+darrere les portes,
+
+en els papers que ningú no llig.
+---
+VEU: gina
+IMATGE: El poeta està en un espai ambigu entre plaça i camí, envoltat de formes que fan incert si busca o és observat; una lluentor parcial d’estrela queda oculta, sense animals ni perseguidors.
+IMATGE_EN: The poet stands in an ambiguous space between square and path, surrounded by forms that make it unclear whether the poet searches or is watched; a partial star-like glow remains hidden, no animals or pursuers.
+
+Açò és una caça,
+
+però no sé qui és la presa:
+
+si l’estrela que s’amaga
+
+o el poeta que la busca.
+---
+VEU: gina
+IMATGE: Composició simbòlica horitzontal: una mà tapa el rastre de marbre i petjades mentre una altra mà assenyala un tron auster, sense rostres ni cossos identificables.
+IMATGE_EN: Symbolic wide horizontal composition: one hand covers the marble trail and footprints while another hand points toward a stark throne, no identifiable faces or bodies.
+
+Al meu davant, la caça del poder:
+
+una mà tapa el rastre,
+
+una altra assenyala el tron.
+---
+VEU: gina
+IMATGE: Continuació de l’espai simbòlic del tron: una estrela emergeix parcialment de la terra i una altra queda soterrada, representació abstracta del control, sense text.
+IMATGE_EN: Continuation of the symbolic throne space: one star emerges partially from the ground while another remains buried, abstract representation of control, no text.
+
+Que se sàpia qui mana,
+
+que se veja qui pot
+
+decidir quina estrela ix
+
+i quina queda soterrada.
+---
+VEU: gina
+IMATGE: El poeta continua pel mateix camí amb un grup obert d’acompanyants que recorden el marbre i el lloc de l’estrela; sense multitud, xiquets ni personatges no justificats.
+IMATGE_EN: The poet continues along the same path with exactly two recurring adult companions, the same two companions who will appear in the next scene; three visible people total, no crowd, no children, and no unjustified characters.
+
+Però jo continue la caça.
+
+Amb mi van els qui m’acompanyaven,
+
+els qui van veure el marbre,
+
+els qui saben que l’estrela era allí.
+---
+VEU: gina
+IMATGE: Retorn a la plaça amb el poeta i els seus acompanyants; l’estrela no és visible físicament i només un reflex subtil als ulls suggereix la memòria compartida, sense bafarades ni text.
+IMATGE_EN: Return to the square with the same poet and exactly the same two recurring adult companions from the previous scene; three visible people total, the star is not physically visible and only a subtle reflection in their eyes suggests shared memory, no speech balloons or text.
+
+No la trobe en la plaça.
+
+La trobe en els seus ulls,
+
+en la memòria que no han pogut amagar,
+
+en cada veu que encara pregunta:
+
+«On és l’estrela?»
+---
+VEU: gina
+IMATGE: Espai de memòria connectat amb la plaça, una peça de fusta i una presència invisible que les figures futures poden buscar, sense mostrar cap nom escrit ni concretar època.
+IMATGE_EN: Memory space connected to the square, a wooden piece and an invisible presence that future figures may seek, without showing a written name or specifying an era.
+
+Quan els qui vindran busquen el meu nom,
+
+que no troben només fusta
+
+ni el silenci que deixa el poder.
+---
+VEU: gina
+IMATGE: Pla general de la plaça i el paisatge de la recerca; no apareix cap estrela física, només una llum subtil suggereix una memòria persistent i una caça que continua.
+IMATGE_EN: Wide shot of the square and search landscape; no physical star appears, only a subtle light suggests persistent memory and a hunt that continues.
+
+Que troben també esta memòria:
+
+la d’una estrela que no es veu
+
+i, tanmateix, no s’ha perdut.
+
+Perquè la caça encara continua.
+---
+VEU: gina
+IMATGE: Retorn circular a la plaça inicial, ara transformada per la memòria; una figura humana genèrica pot buscar o recordar, però l’estrela no reapareix físicament.
+IMATGE_EN: Circular return to the original square, transformed by memory; exactly one generic human figure searches or remembers, one visible person total, and the star does not physically reappear.
+
+I mentre algú la recorde,
+
+mentre algú la busque,
+
+l’estrela serà allí.

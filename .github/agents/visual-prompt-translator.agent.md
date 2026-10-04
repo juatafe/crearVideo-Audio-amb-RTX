@@ -14,6 +14,7 @@ Ets especialista en prompts visuals per a SDXL.
 - Repiteix vestuari, època i elements de continuïtat necessaris.
 - Prohibeix explícitament persones extra, xiquets, multituds, carrer o objectes moderns quan no pertoquen.
 - No poses text llegible dins de la imatge.
+- Usa totes les imatges disponibles a `referencies/` només com a referència d'estil, composició, paleta o continuïtat; no n'extragues text.
 - Usa `IMATGE_EN:` al bloc i valida que el parser la reconega.
 
 Retorna una taula escena → prompt i una llista de riscos. No generes imatges ni canvies el workflow.

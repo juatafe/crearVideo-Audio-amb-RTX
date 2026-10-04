@@ -7,8 +7,10 @@ locucio/*.mp3
 imatges/*.png
 imatges/*.jpg
 imatges/*.prompt
+imatges/**/*.png
 video/*.mp4
 locucio/fragments/*.voice
 tmp/*
 !tmp/.gitkeep
+.project-state/
 workflows/comfyui_api_workflow.json

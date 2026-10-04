@@ -1,0 +1,10 @@
+{
+  "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": "DreamShaperXL_Turbo-Lightning.safetensors"}},
+  "2": {"class_type": "LoadImage", "inputs": {"image": "composition-guide-1024x768.png", "upload": "image"}},
+  "3": {"class_type": "VAEEncode", "inputs": {"pixels": ["2", 0], "vae": ["1", 2]}},
+  "4": {"class_type": "CLIPTextEncode", "inputs": {"text": "wide horizontal 2D Valencian comic composition, austere square, dirt path, dry clearing, strong black ink outlines, muted flat colors, simple coherent composition, no text, no figures", "clip": ["1", 1]}},
+  "5": {"class_type": "CLIPTextEncode", "inputs": {"text": "person, people, human, man, woman, child, face, body, silhouette, animal, bird, figure, text, letters, words, signature, watermark, logo, subtitles, photorealistic, photograph, 3D render, buildings, bridge, vehicle, modern object, extra objects, collage, blurry, low quality", "clip": ["1", 1]}},
+  "6": {"class_type": "KSampler", "inputs": {"seed": 170001, "steps": 12, "cfg": 4.5, "sampler_name": "dpmpp_2m", "scheduler": "karras", "denoise": 0.45, "model": ["1", 0], "positive": ["4", 0], "negative": ["5", 0], "latent_image": ["3", 0]}},
+  "7": {"class_type": "VAEDecode", "inputs": {"samples": ["6", 0], "vae": ["1", 2]}},
+  "8": {"class_type": "SaveImage", "inputs": {"filename_prefix": "img2img_scene001_variant", "images": ["7", 0]}}
+}

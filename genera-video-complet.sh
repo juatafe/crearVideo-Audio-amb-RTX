@@ -201,4 +201,38 @@ echo "=== 4/5 Muntant vídeo mestre ==="
 echo "=== 5/5 Comprimint ==="
 ./05-comprimeix-15mb.sh
 
+echo "=== 6/6 Validant projecte ==="
+./scripts/validate-video-project.sh
+
+ARCHIVE_ROOT="${VIDEO_ARCHIVE_DIR:-videos-generats}"
+RUN_NAME="${PROJECT_NAME:-projecte-video}-$(date +%Y%m%d-%H%M%S)"
+ARCHIVE_DIR="$ROOT/$ARCHIVE_ROOT/$RUN_NAME"
+mkdir -p "$ARCHIVE_DIR"
+cp -- "$FINAL_VIDEO" "$ARCHIVE_DIR/"
+cp -- manifest.json "$ARCHIVE_DIR/manifest.json"
+printf '%s\n' "PROJECT_NAME=${PROJECT_NAME:-projecte-video}" "CREATED_AT=$(date --iso-8601=seconds)" > "$ARCHIVE_DIR/README.txt"
+
+echo "=== VÍDEO ARXIVAT ==="
+echo "$ARCHIVE_DIR/$(basename "$FINAL_VIDEO")"
+
+read -r -p "Vols eliminar els fitxers residuals de treball? [y/N] " CLEANUP || CLEANUP=""
+if [[ "$CLEANUP" =~ ^[YySs]$ ]]; then
+  rm -f -- \
+    tmp/scene-*.mp4 \
+    tmp/concat.txt \
+    tmp/base-video.mp4 \
+    tmp/ffmpeg-pass* \
+    tmp/tts_concat.txt \
+    tmp/matxa_tts.py \
+    video/master.mp4 \
+    video/final-15mb.mp4 \
+    locucio/locucio.wav \
+    locucio/locucio-amb-musica.mp3
+  rm -f -- locucio/fragments/*.wav locucio/fragments/*.wav.voice
+  rm -f -- imatges/*.png imatges/*.png.prompt imatges/*.jpg imatges/*.jpeg
+  echo "Residus eliminats. L'arxiu del vídeo es conserva en: $ARCHIVE_DIR"
+else
+  echo "Residus conservats. L'arxiu del vídeo es conserva en: $ARCHIVE_DIR"
+fi
+
 echo "=== FET ==="

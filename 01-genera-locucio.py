@@ -27,6 +27,9 @@ def load_env(path: Path):
     return env
 
 cfg = load_env(ROOT / "config.env")
+os.environ.setdefault("TTS_API_URL", cfg.get("TTS_API_URL", "http://127.0.0.1:8000"))
+os.environ.setdefault("TTS_LANGUAGE", cfg.get("TTS_LANGUAGE", "ca-va"))
+os.environ.setdefault("TTS_VOICE", cfg.get("TTS_VOICE", "quim"))
 voice_wav = ROOT / cfg.get("VOICE_WAV", "locucio/locucio.wav")
 voice_wav.parent.mkdir(parents=True, exist_ok=True)
 
@@ -37,11 +40,18 @@ scenes = json.loads(MANIFEST.read_text(encoding="utf-8"))
 tts_template = os.environ.get("TTS_COMMAND", "").strip()
 
 if not tts_template:
-    raise SystemExit(
-        "ERROR: falta TTS_COMMAND.\n"
-        "Configura un comandament de Matxa/Aina, per exemple:\n"
-        "export TTS_COMMAND='python /ruta/matxa_tts.py --text-file \"{text_file}\" --output \"{output_wav}\"'"
-    )
+    bridge = ROOT / "scripts" / "matxa_tts.py"
+    if bridge.exists():
+        tts_template = (
+            f'python3 "{bridge}" --text-file "{{text_file}}" '
+            '--output "{output_wav}"'
+        )
+        print(f"TTS_COMMAND no definit: usant {bridge}")
+    else:
+        raise SystemExit(
+            "ERROR: falta TTS_COMMAND i no trobe el pont TTS: "
+            f"{bridge}"
+        )
 
 for scene in scenes:
     if scene.get("visual_only") or not scene.get("audio"):

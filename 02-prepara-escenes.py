@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import json
+import hashlib
 import os
 import re
 
@@ -32,12 +33,69 @@ voice_directive = re.compile(r"(?im)^\s*(?:VEU|VOICE)\s*:\s*([A-Za-z0-9_.-]+)\s*
 image_directive = re.compile(r"(?im)^\s*(?:IMATGE|IMAGE)\s*:\s*(.+?)\s*$")
 image_english_directive = re.compile(r"(?im)^\s*(?:IMATGE_EN|IMAGE_EN)\s*:\s*(.+?)\s*$")
 
+
+def scene_negative_prompt(visual_subject, base_prompt):
+    """Add only the exclusions stated explicitly by the scene prompt."""
+    exclusions = []
+    subject = visual_subject.lower()
+    if re.search(r"exactly\s+0\s+people|no\s+people|without\s+(?:any\s+)?people", subject):
+        exclusions.extend(
+            ["person", "people", "human", "man", "woman", "child", "face", "body", "silhouette", "figure"]
+        )
+    if re.search(r"no\s+(?:animals?|animal)", subject):
+        exclusions.append("animal")
+    if re.search(r"no\s+(?:children|child|kids?)", subject):
+        exclusions.append("child")
+    if re.search(r"no\s+(?:crowds?|crowd)", subject):
+        exclusions.append("crowd")
+    if re.search(r"no\s+(?:buildings?|houses?)", subject):
+        exclusions.extend(["building", "house"])
+    return ", ".join(dict.fromkeys([base_prompt, *exclusions]))
+
 if not script_file.exists():
     raise SystemExit(f"ERROR: no trobe el guió: {script_file}")
 
 text = script_file.read_text(encoding="utf-8").strip()
 if not text:
     raise SystemExit("ERROR: el guió està buit.")
+
+
+def clean_generated_outputs():
+    """Remove outputs from a previous script before preparing a new project."""
+    generated_paths = [
+        ROOT / cfg.get("IMAGE_DIR", "imatges"),
+        ROOT / "locucio" / "fragments",
+        ROOT / "video",
+    ]
+    generated_patterns = {
+        "imatges": ("*.png", "*.png.prompt", "*.jpg", "*.jpeg"),
+        "fragments": ("*.wav", "*.wav.voice"),
+        "video": ("master.mp4", "final-15mb.mp4"),
+    }
+    for directory in generated_paths:
+        directory.mkdir(parents=True, exist_ok=True)
+        patterns = generated_patterns.get(directory.name, ())
+        for pattern in patterns:
+            for path in directory.glob(pattern):
+                if path.is_file():
+                    path.unlink()
+    for path in (ROOT / "tmp").glob("*"):
+        if path.name != ".gitkeep" and path.is_file():
+            path.unlink()
+
+
+state_dir = ROOT / ".project-state"
+state_dir.mkdir(exist_ok=True)
+state_file = state_dir / "script.sha256"
+script_fingerprint = hashlib.sha256(text.encode("utf-8")).hexdigest()
+previous_fingerprint = state_file.read_text(encoding="utf-8").strip() if state_file.exists() else ""
+if previous_fingerprint != script_fingerprint:
+    if previous_fingerprint:
+        print("NOU GUIÓ: netejant els artefactes generats de la història anterior")
+    else:
+        print("PRIMERA EXECUCIÓ: netejant possibles artefactes antics")
+    clean_generated_outputs()
+    state_file.write_text(script_fingerprint + "\n", encoding="utf-8")
 
 # Separació preferent per delimitador explícit --- o per una nova directiva VEU:.
 blocks = []
@@ -87,7 +145,7 @@ for i, block in enumerate(blocks, 1):
         "audio": "" if visual_only else f"locucio/fragments/{scene_id}.wav",
         "image": f"imatges/{scene_id}.png",
         "image_prompt": prompt,
-        "negative_prompt": negative_prompt,
+        "negative_prompt": scene_negative_prompt(visual_subject, negative_prompt),
     }
     if voice:
         scene["voice"] = voice

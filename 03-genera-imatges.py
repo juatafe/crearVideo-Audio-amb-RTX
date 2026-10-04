@@ -72,6 +72,10 @@ checkpoint_nodes = [
     node for node in base_workflow.values()
     if node.get("class_type") == "CheckpointLoaderSimple"
 ]
+checkpoint_name_override = cfg.get("CHECKPOINT_NAME", "").strip()
+if checkpoint_name_override:
+    for checkpoint_node in checkpoint_nodes:
+        checkpoint_node.setdefault("inputs", {})["ckpt_name"] = checkpoint_name_override
 if checkpoint_nodes:
     checkpoint_name = checkpoint_nodes[0].get("inputs", {}).get("ckpt_name", "")
     if checkpoint_name.startswith("v1-5-pruned"):
@@ -116,10 +120,9 @@ for scene in scenes:
         if node.get("class_type") == "KSampler"
     ]
     for sampler in sampler_nodes:
-        # Només arribem ací quan la imatge no existeix o és massa xicoteta.
-        # Una llavor nova fa que, si l'usuari esborra una imatge, la següent
-        # generació siga una variant nova i no una còpia exacta de l'anterior.
-        sampler["inputs"]["seed"] = secrets.randbelow(2**63)
+        # Les escenes poden fixar una llavor reproduïble en el manifest.
+        # Si no n'hi ha, conserva el comportament anterior aleatori.
+        sampler["inputs"]["seed"] = scene.get("seed", secrets.randbelow(2**63))
     prefix = f"auto_{scene['id']}"
     wf[save_node]["inputs"]["filename_prefix"] = prefix
 
