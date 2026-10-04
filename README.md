@@ -42,7 +42,7 @@ L'agent `Scene Director` farà el treball intermedi:
 1. separarà el text en escenes;
 2. conservarà el text narratiu que s'ha de locutar;
 3. proposarà una veu;
-4. crearà la descripció visual en valencià i el prompt anglès per a ComfyUI;
+4. crearà la descripció visual en valencià; `Visual Prompt Translator` la convertirà en el prompt anglès per a ComfyUI;
 5. indicarà personatges, accions i continuïtat;
 6. et mostrarà el resum abans d'escriure `guio/guio.txt`.
 
@@ -289,7 +289,7 @@ Si vols inspeccionar el prompt final abans de generar, obri `manifest.json` i bu
 Per a una revisió assistida des de VS Code/Copilot, usa `Video Supervisor` i indica que ha d'utilitzar `guio/guio.txt`. El flux recomanat és:
 
 1. `Scene Director`: comprova blocs, veus, diàleg i continuïtat.
-2. `Visual Prompt Translator`: millora `IMATGE_EN:` sense tocar el diàleg.
+2. `Visual Prompt Translator`: converteix `IMATGE:` en `IMATGE_EN:` sense tocar el diàleg ni canviar l'acció.
 3. `Image Quality Inspector`: revisa resolució, enquadrament, persones extra, text espuri i coherència visual.
 4. `Pipeline Runner`: executa les fases i diagnostica errors de TTS, ComfyUI o FFmpeg.
 

@@ -14,11 +14,11 @@ Retorna primer un resum per a aprovació i després el contingut complet de `gui
 ```text
 VEU: gina
 IMATGE: Descripció visual concreta en valencià.
-IMATGE_EN: Clear English visual prompt with framing, action and exact character count.
-
 Text original que es locutarà.
 ---
 ```
+
+No generes `IMATGE_EN:`. La traducció anglesa és responsabilitat exclusiva de `visual-prompt-translator`, després que aquest guió haja sigut aprovat.
 
 No generes TTS ni imatges i no dones el guió per aprovat fins que el supervisor o l'usuari ho confirme.
 
