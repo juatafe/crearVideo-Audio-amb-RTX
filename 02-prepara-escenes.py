@@ -86,16 +86,31 @@ def clean_generated_outputs():
 
 state_dir = ROOT / ".project-state"
 state_dir.mkdir(exist_ok=True)
-state_file = state_dir / "script.sha256"
-script_fingerprint = hashlib.sha256(text.encode("utf-8")).hexdigest()
+state_file = state_dir / "generation.sha256"
+generation_settings = {
+    "script": text,
+    "visual_style": visual_style,
+    "character_bible": character_bible,
+    "negative_prompt": negative_prompt,
+    "image_dir": cfg.get("IMAGE_DIR", "imatges"),
+    "image_width": cfg.get("IMAGE_WIDTH", ""),
+    "image_height": cfg.get("IMAGE_HEIGHT", ""),
+    "checkpoint_name": cfg.get("CHECKPOINT_NAME", ""),
+    "visual_only_voice": visual_only_voice,
+    "tts_voice": cfg.get("TTS_VOICE", ""),
+    "tts_language": cfg.get("TTS_LANGUAGE", ""),
+}
+generation_fingerprint = hashlib.sha256(
+    json.dumps(generation_settings, sort_keys=True, ensure_ascii=False).encode("utf-8")
+).hexdigest()
 previous_fingerprint = state_file.read_text(encoding="utf-8").strip() if state_file.exists() else ""
-if previous_fingerprint != script_fingerprint:
+if previous_fingerprint != generation_fingerprint:
     if previous_fingerprint:
-        print("NOU GUIÓ: netejant els artefactes generats de la història anterior")
+        print("NOVA CONFIGURACIÓ: netejant els artefactes generats anteriors")
     else:
         print("PRIMERA EXECUCIÓ: netejant possibles artefactes antics")
     clean_generated_outputs()
-    state_file.write_text(script_fingerprint + "\n", encoding="utf-8")
+    state_file.write_text(generation_fingerprint + "\n", encoding="utf-8")
 
 # Separació preferent per delimitador explícit --- o per una nova directiva VEU:.
 blocks = []

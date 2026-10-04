@@ -6,6 +6,27 @@ Esta carpeta automatitza una cadena de treball pensada per a crear vídeos narra
 
 La idea és reutilitzar-la per a rondalles, vídeos educatius, històries, divulgació, campanyes, etc. Per a un projecte nou, normalment només cal canviar el guió i l'estil visual.
 
+## 0. Idea general i ordre recomanat
+
+El projecte separa quatre coses:
+
+1. **Contingut:** el text de `guio/guio.txt`, les escenes i la veu.
+2. **Imatge:** els prompts, l'estil i el workflow de ComfyUI.
+3. **Muntatge:** la duració de cada imatge, l'orientació i els moviments de càmera.
+4. **Distribució:** la compressió final i la mida màxima del fitxer.
+
+Per a crear un vídeo nou, segueix sempre este ordre:
+
+1. Edita el guió i les descripcions visuals.
+2. Revisa les escenes amb `02-prepara-escenes.py` i `manifest.json`.
+3. Revisa els prompts amb els agents abans de gastar temps de GPU.
+4. Genera veu i imatges.
+5. Revisa les imatges i corregeix només les escenes problemàtiques.
+6. Munta, comprimeix i valida el vídeo.
+7. Conserva el resultat en `videos-generats/`.
+
+Les carpetes `imatges/`, `locucio/`, `video/` i `tmp/` són espai de treball. Les carpetes dins de `videos-generats/` són l'arxiu de resultats i no es netegen quan canvies de projecte.
+
 ## 1. Estructura
 
 ```text
@@ -289,7 +310,60 @@ Per regenerar una escena concreta, modifica el seu `IMATGE_EN:` o `image_prompt`
 
 `persones extra o estil inconsistent`: millora `IMATGE_EN:`, reforça `CHARACTER_BIBLE` i `NEGATIVE_PROMPT`, i regenera només les escenes afectades.
 
-## 8. Muntar el vídeo mestre
+## 8. Què passa quan canvies el projecte?
+
+El projecte calcula una empremta de generació amb el guió, l'estil visual, el prompt negatiu, el checkpoint, la resolució d'imatge i la configuració de veu. Quan canvia alguna d'aquestes dades, `02-prepara-escenes.py` detecta una configuració nova i neteja els fitxers de treball dependents. Les còpies que ja estan en `videos-generats/` no es toquen.
+
+| Canvi | Què cal fer | Què es regenera |
+|---|---|---|
+| Text del guió, blocs `---` o nombre d'escenes | Edita `guio/guio.txt` i executa el pipeline complet | Manifest, veu, imatges i vídeo |
+| `IMATGE:` o `IMATGE_EN:` d'una escena | Executa `02-prepara-escenes.py`, revisa `manifest.json` i després `03-genera-imatges.py` | Les imatges amb prompt canviat; després cal remuntar el vídeo |
+| `VISUAL_STYLE`, `CHARACTER_BIBLE` o `NEGATIVE_PROMPT` | Executa el pipeline complet | Imatges i, per coherència, veu i vídeo de treball |
+| `CHECKPOINT_NAME` o resolució de ComfyUI | Comprova el workflow i executa el pipeline complet | Imatges i vídeo |
+| `TTS_VOICE`, `TTS_LANGUAGE` o directiva `VEU:` | Executa el pipeline complet | Locució i vídeo |
+| `MASTER_WIDTH` / `MASTER_HEIGHT` | Executa `04-munta-video.sh` i `05-comprimeix-15mb.sh` | Només màster i vídeo comprimit |
+| `FINAL_HEIGHT`, `FINAL_FPS`, `TARGET_MB` o bitrate | Executa `05-comprimeix-15mb.sh` | Només vídeo comprimit |
+| Música (`USE_MUSIC`, `MUSIC_FILE`, `MUSIC_VOLUME`) | Executa `04-munta-video.sh` i després `05-comprimeix-15mb.sh` | Màster i vídeo comprimit |
+
+### Exemple: passar de vertical a horitzontal
+
+La configuració actual és vertical, adequada per a Reels, TikTok o Stories:
+
+```bash
+MASTER_WIDTH=1080
+MASTER_HEIGHT=1920
+```
+
+Per a YouTube o una presentació horitzontal, canvia només:
+
+```bash
+MASTER_WIDTH=1920
+MASTER_HEIGHT=1080
+```
+
+No cal tornar a generar la veu ni les imatges. Amb les imatges i l'àudio disponibles, executa:
+
+```bash
+./04-munta-video.sh
+./05-comprimeix-15mb.sh
+scripts/validate-video-project.sh
+```
+
+Si abans has netejat els fitxers de treball, primer hauràs de tornar a generar la veu i les imatges amb `./genera-video-complet.sh`.
+
+### Exemple: fer un vídeo nou amb un altre guió
+
+1. Guarda una còpia del vídeo anterior: ja estarà en `videos-generats/`.
+2. Substitueix el contingut de `guio/guio.txt`.
+3. Canvia `PROJECT_NAME` en `config.env` per identificar el nou resultat.
+4. Executa `python3 02-prepara-escenes.py` i revisa `manifest.json`.
+5. Corregeix els prompts o la veu abans de generar.
+6. Executa `./genera-video-complet.sh`.
+7. Quan pregunte per la neteja, respon `y`/`s` si vols conservar només l'arxiu final.
+
+El canvi de guió activa automàticament la neteja dels fitxers de treball antics. L'arxiu del vídeo anterior continua intacte.
+
+## 9. Muntar el vídeo mestre
 
 Executa:
 
@@ -317,7 +391,7 @@ video/master.mp4
 
 El màster convé conservar-lo sempre en bona qualitat.
 
-## 9. Comprimir automàticament a menys de 15 MB
+## 10. Comprimir automàticament a menys de 15 MB
 
 Executa:
 
@@ -347,13 +421,13 @@ Eixida:
 video/final-15mb.mp4
 ```
 
-## 10. Arxiu i neteja
+## 11. Arxiu i neteja
 
 `./genera-video-complet.sh` conserva automàticament cada vídeo acabat en una carpeta nova dins de `videos-generats/`, amb el nom `PROJECT_NAME-data-hora`. Guarda el vídeo comprimit i el `manifest.json` de la mateixa execució; estes carpetes no es toquen quan es prepara un guió nou.
 
 Al final pregunta si vols eliminar els fitxers de treball: imatges generades, fragments d'àudio, vídeos intermedis i fitxers temporals. Respon `y` o `s` per netejar-los, o simplement `Enter` per conservar-los.
 
-## 11. Supervisor i agents
+## 12. Supervisor i agents
 
 La branca `automation/openproject-supervisor` inclou agents i skills de VS Code/Copilot per automatitzar el flux complet:
 
@@ -375,7 +449,7 @@ La documentació de la futura connexió amb OpenProject és a `docs/OPENPROJECT-
 
 Si el fitxer encara supera `TARGET_MB` per overhead del contenidor, el script fa un segon intent reduint lleugerament el bitrate.
 
-## 12. Fer-ho tot seguit
+## 13. Fer-ho tot seguit
 
 Una vegada configurat el TTS i ComfyUI:
 
@@ -409,7 +483,7 @@ SKIP_TTS=1 SKIP_IMAGES=1 ./genera-video-complet.sh
 
 Açò és útil quan ja tens la veu o les imatges i no vols que el pobre ordinador torne a pintar trenta castells perquè sí.
 
-## 13. Música de fons
+## 14. Música de fons
 
 En `config.env`:
 
@@ -421,7 +495,7 @@ MUSIC_VOLUME=0.16
 
 El muntatge farà loop de la música i la mesclarà per davall de la veu.
 
-## 14. Variables principals de `config.env`
+## 15. Variables principals de `config.env`
 
 | Variable | Funció |
 |---|---|
@@ -442,7 +516,7 @@ MASTER_WIDTH=1920
 MASTER_HEIGHT=1080
 ```
 
-## 15. Recomanació de treball
+## 16. Recomanació de treball
 
 Conserva sempre:
 
@@ -461,7 +535,7 @@ video/youtube.mp4
 
 El màster és la còpia bona. No té massa sentit comprimir a 15 MB i després usar eixa versió per tornar a comprimir; això és com fotocopiar una fotocòpia d'una fotocòpia i esperar que aparega el 4K per intervenció divina.
 
-## 16. Ordre ràpida
+## 17. Ordre ràpida
 
 ```bash
 nano guio/guio.txt
