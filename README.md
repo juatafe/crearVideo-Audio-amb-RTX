@@ -27,6 +27,37 @@ Per a crear un vídeo nou, segueix sempre este ordre:
 
 Les carpetes `imatges/`, `locucio/`, `video/` i `tmp/` són espai de treball. Les carpetes dins de `videos-generats/` són l'arxiu de resultats i no es netegen quan canvies de projecte.
 
+### La manera fàcil: dona-li un text a l'agent
+
+No cal que escrigues `VEU:`, `IMATGE:` ni `IMATGE_EN:` manualment. Pots donar a `Video Supervisor` un text com este:
+
+```text
+Vull un vídeo breu sobre una xiqueta que planta un arbre al poble del seu avi.
+Ha de començar amb el poble sec, mostrar com planten l'arbre i acabar amb el poble verd.
+Vull un estil de conte il·lustrat, càlid i esperançador, en format vertical.
+```
+
+L'agent `Scene Director` farà el treball intermedi:
+
+1. separarà el text en escenes;
+2. conservarà el text narratiu que s'ha de locutar;
+3. proposarà una veu;
+4. crearà la descripció visual en valencià i el prompt anglès per a ComfyUI;
+5. indicarà personatges, accions i continuïtat;
+6. et mostrarà el resum abans d'escriure `guio/guio.txt`.
+
+Quan confirmes el resum, `Video Supervisor` escriu el guió tècnic i continua amb el pipeline. Així no cal conéixer el format intern: només has d'aportar el text, el tema, l'estil desitjat i, si és important, el format vertical o horitzontal.
+
+Exemple de petició a l'agent:
+
+```text
+Usa este text per preparar un vídeo. No canvies les paraules de la narració;
+només crea les escenes i les imatges necessàries. Proposa primer el guió i espera
+la meua confirmació abans de generar veu o imatges:
+
+[enganxa ací la història, poesia o narració]
+```
+
 ## 1. Estructura
 
 ```text
@@ -76,6 +107,8 @@ Edita:
 nano guio/guio.txt
 nano config.env
 ```
+
+Si uses l'agent, aquest pas consisteix simplement a donar-li el text i confirmar el guió que propose. L'agent escriurà `guio/guio.txt` amb el format que entenen els scripts.
 
 La variable més habitual de canviar és:
 
@@ -432,12 +465,14 @@ Al final pregunta si vols eliminar els fitxers de treball: imatges generades, fr
 La branca `automation/openproject-supervisor` inclou agents i skills de VS Code/Copilot per automatitzar el flux complet:
 
 - `Video Supervisor`: coordina escenes, prompts, TTS, ComfyUI i validació.
-- `Scene Director`: revisa estructura, veus i continuïtat del guió.
+- `Scene Director`: transforma text lliure en un guió amb escenes, veus i prompts visuals.
 - `Visual Prompt Translator`: crea `IMATGE_EN:` sense modificar el diàleg.
 - `Image Quality Inspector`: comprova personatges, composició i resolució.
 - `Pipeline Runner`: executa les fases locals i diagnostica errors.
 
 També pots invocar el prompt `.github/prompts/run-video-supervisor.prompt.md`.
+
+En OpenCode, la petició recomanada és dirigir-se al `Video Supervisor` amb el text complet. En VS Code/Copilot, pots invocar `Scene Director` per preparar només el guió o `Video Supervisor` per preparar-lo i continuar amb el vídeo.
 
 La validació final és:
 
