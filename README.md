@@ -29,6 +29,13 @@ Les carpetes `imatges/`, `locucio/`, `video/` i `tmp/` són espai de treball. Le
 
 ### La manera fàcil: dona-li un text a l'agent
 
+Després de clonar el repositori, obri **OpenCode dins de la carpeta del
+projecte**. En la interfície d'OpenCode, prem `Tab` per obrir el selector,
+tria l'agent `video-supervisor`, enganxa-li el prompt i envia'l. Quan el
+supervisor et torne el resum del que ha entés i el pla de treball, **accepta
+la proposta** i espera que continue amb el pas següent. No cal canviar d'agent
+ni tornar a enviar el prompt mentre està treballant.
+
 No cal que escrigues `VEU:`, `IMATGE:` ni `IMATGE_EN:` manualment. Pots donar a `Video Supervisor` un text com este:
 
 ```text
@@ -538,7 +545,11 @@ La branca `opencode` i la configuració de VS Code/Copilot inclouen agents i ski
 
 També pots invocar el prompt `.github/prompts/run-video-supervisor.prompt.md`.
 
-En OpenCode, la petició recomanada és dirigir-se al `Video Supervisor` amb el text complet. En VS Code/Copilot, pots invocar `Scene Director` per preparar només el guió o `Video Supervisor` per preparar-lo i continuar amb el vídeo.
+En OpenCode, obri sempre la carpeta clonada del projecte, prem `Tab`, tria
+`video-supervisor` i envia-li el text complet. Quan et mostre què ha entés i
+què pensa fer, accepta la proposta i espera que continue. En VS Code/Copilot,
+pots invocar `Scene Director` per preparar només el guió o `Video Supervisor`
+per preparar-lo i continuar amb el vídeo.
 
 La validació final és:
 
